@@ -1,0 +1,98 @@
+{
+  "name": "diagnosis_result",
+  "description": "The structured root-cause analysis of a system incident.",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "occurredAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO 8601 timestamp of incident start. Use the earliest relevant log timestamp."
+      },
+      "title": {
+        "type": "string",
+        "description": "Concise technical title of the incident."
+      },
+      "summary": {
+        "type": "string",
+        "description": "What happened, 2-4 sentences detailing the failure mechanism and its blast radius."
+      },
+      "rootCause": {
+        "type": "string",
+        "description": "Why this happened, single definitive sentence identifying the underlying technical cause. State 'Unknown' if unsupported by evidence."
+      },
+      "possibleContributingFactors": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Secondary technical factors or misconfigurations that worsened the failure."
+      },
+      "timeline": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "logIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Associated logIds (as provided in input)."
+            },
+            "event": {
+              "type": "string",
+              "description": "Factual description of the state change or error."
+            }
+          },
+          "required": ["logIds", "event"]
+        },
+        "description": "Chronological sequence of critical state changes."
+      },
+      "severity": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4,
+        "description": "Incident impact: 0(Critical/Breach), 1(Major), 2(Degraded), 3(Minor), 4(Noise)"
+      },
+      "recommendedActions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "mitigation",
+                "investigation",
+                "prevention",
+                "communication",
+                "other"
+              ]
+            },
+            "action": {
+              "type": "string",
+              "description": "Specific, actionable engineering task."
+            }
+          },
+          "required": ["type", "action"]
+        },
+        "description": "Prioritized list of next steps."
+      }
+    },
+    "required": [
+      "occurredAt",
+      "title",
+      "summary",
+      "rootCause",
+      "possibleContributingFactors",
+      "timeline",
+      "severity",
+      "recommendedActions"
+    ]
+  }
+}

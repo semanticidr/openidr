@@ -1,0 +1,20 @@
+# ignore vim
+*.swp
+*.swo
+
+# testing
+coverage.out
+
+# local env files
+.env*.local
+.env
+.env.sh
+*.env*
+*.creds
+.creds.json
+
+# ignore build dir
+build/
+debug_dumps
+*_debug_dumps
+*.prof
